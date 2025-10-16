@@ -1,9 +1,44 @@
+"use client";
+import axios from "axios";
 import Image from "next/image";
+import { BASE_URL } from "../../constant";
+import { useEffect } from "react";
+import { useRouter } from 'next/navigation';
+
+
+axios.defaults.withCredentials = true
 
 export default function Home() {
+
+  const router = useRouter();
+  
+  const userDetails = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/getuserdetails`)
+      console.log(response?.data)
+
+    } catch (err) {
+      router.push('/login')
+    }
+  }
+
+  useEffect(() => {
+    userDetails()
+  }, [])
+
+
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+     
+           <button
+                 onClick={()=>router.push('/productImport')}
+                   className="w-full bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer
+                    text-white py-2 rounded-[0.7rem] mt-4 hover:opacity-90 transition-opacity duration-200 flex justify-center items-center gap-2"
+                 >
+                 Product Import
+                 </button>
+     
+      {/* <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
           src="/next.svg"
@@ -97,7 +132,7 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 }

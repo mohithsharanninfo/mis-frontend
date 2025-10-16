@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: linear-gradient(to bottom, #fff8e1, #ffffff);
+  --foreground: #b8860b;
 }
 
 @theme inline {
@@ -24,3 +24,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.ag-theme-alpine .ag-header-cell-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .ag-cell-value, .ag-group-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+} */
+
+.ag-theme-alpine .ag-header {
+/* background-color: #8c5c34; */
+background: linear-gradient(103.45deg, rgb(97, 65, 25) -11.68%, rgb(205, 154, 80) 48.54%, rgb(97, 65, 25) 108.76%);
+height: 40px !important;
+padding: 6px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+}
+
+.ag-root-wrapper {
+  border-radius: 10px !important;
+}
+
+
+
+
+.ag-theme-alpine .ag-row.ag-row-selected .ag-cell {
+    border: none !important;
+}
+
+.ag-theme-alpine .ag-cell:focus,
+.ag-theme-alpine .ag-cell:focus-within {
+  outline: none !important;
+  border: none !important;
+}
+
+
+
