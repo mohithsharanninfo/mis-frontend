@@ -56,7 +56,7 @@ const ProductImport = () => {
         }
         setLoadExcel(true)
         try {
-            const response = await axios.post(`${BASE_URL}/getStylecodeImages`, { stylecodes: excelData });
+            const response = await axios.post(`${BASE_URL}/api/getStylecodeImages`, { stylecodes: excelData });
             const result = await response?.data;
             setResultData(result?.data)
             if (result?.data?.length <= 0) {
@@ -75,12 +75,13 @@ const ProductImport = () => {
         }
         setLoadImport(true)
         try {
-            const response = await axios.post(`${BASE_URL}/importStylecode`, { jsonPayload: selectedStylecodes });
+            const response = await axios.post(`${BASE_URL}/api/importStylecode`, { jsonPayload: selectedStylecodes });
             const result = await response?.data;
 
             if (result?.success === true) {
                 toast.success(result?.message);
-                console.log("==>", result)
+            }else{
+                toast.error('Something went wrong !');
             }
         } catch (err) {
             toast.error('Something went wrong !');
@@ -96,7 +97,7 @@ const ProductImport = () => {
     return (
         <div className="font-sans h-screen" >
             <div className=' pb-10'>
-                <h1 className='text-center text-3xl my-5 border-b border-amber-200'>Medusa Product Import</h1>
+                <h1 className='text-center text-3xl my-5 border-b border-amber-200'>Product Import</h1>
                 <div className="mx-auto mt-15 bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4  max-w-md w-full">
                     <p className='text-center'>Choose file below to import.</p>
 

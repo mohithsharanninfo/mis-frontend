@@ -1,13 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import 'ag-grid-community/styles/ag-grid.css';
 import { Providers } from "./Provider";
+import ClientLayout from "./ClientLayout"; 
 
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,27 +24,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased mx-10`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased mx-10`}>
         <Providers>
-          {children}
+          <ClientLayout>{children}</ClientLayout>
         </Providers>
-        <ToastContainer
-          position="top-center"
-          autoClose={1500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       </body>
     </html>
-
-
   );
 }

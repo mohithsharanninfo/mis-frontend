@@ -73,6 +73,7 @@ const AgGridTable = ({ rowData }) => {
             <div className='w-full my-8 '>
                 <AgGridReact
                     ref={gridRef}
+                      theme="legacy"
                     rowHeight={100}
                     rowData={rowData}
                     columnDefs={colDefs}
