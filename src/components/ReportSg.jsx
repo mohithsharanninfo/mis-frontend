@@ -6,6 +6,8 @@ import axios from 'axios';
 import { BASE_URL, PRODUCT_URL_SG } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import DateRangePickerPopup from './DateRangePicker';
+import { CiSearch } from "react-icons/ci";
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -13,11 +15,26 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const ReportSgTable = () => {
 
     const [dataSg, setDataSg] = useState([])
-        const dateRange = useSelector((state) => state?.sliceData);
+    const [searchTerm, setSearchTerm] = useState('')
+    const dateRange = useSelector((state) => state?.sliceData);
 
-    const getReportsSg= async () => {
+    const getReportsSg = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/importedProductsSg?fromDate=${dateRange?.startDate}&toDate=${dateRange?.endDate}`)
+            const result = await response?.data?.data
+            setDataSg(result)
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
+
+    const searchStylecodesSg = async () => {
+        try {
+            if (!searchTerm) {
+                getReportsSg()
+                return
+            }
+            const response = await axios.get(`${BASE_URL}/api/searchstylecodeSg?searchTerm=${searchTerm}`);
             const result = await response?.data?.data
             setDataSg(result)
         } catch (err) {
@@ -60,15 +77,33 @@ const ReportSgTable = () => {
 
     useEffect(() => {
         getReportsSg()
-    },  [dateRange?.startDate, dateRange?.endDate])
+    }, [dateRange?.startDate, dateRange?.endDate])
 
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
+            <div className='flex flex-row justify-between items-center'>
+                <div> <DateRangePickerPopup /></div>
+                <div className='w-full max-w-[250px]'>
+                    <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
+                    <div className='flex flex-row justify-end items-center gap-2 '>
+                        <div className='w-full'>
+                            <input type="text" placeholder='Stylecode...' onChange={(e) => {
+                                setSearchTerm(e.target.value)
+                                if (e.target.value === '') {
+                                    getReportsSg()
+                                }
+                            }} className='border-2 border-amber-300 p-2 outline-amber-200 rounded w-full' />
+                        </div>
+                        <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchStylecodesSg()}> <CiSearch color='white' size={24} /></div>
+                    </div>
+                </div>
+
+            </div>
             <div className='w-full my-8 '>
-               <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
+                <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
                 <AgGridReact
                     //ref={gridRef}
-                      theme="legacy"
+                    theme="legacy"
                     rowHeight={40}
                     rowData={dataSg}
                     columnDefs={colDefs}

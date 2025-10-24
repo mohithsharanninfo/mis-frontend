@@ -29,8 +29,8 @@ export default function Sidebar() {
     {
       title: "Settings",
       children: [
-        { title: "Profile", path: "/settings/profile" },
-        { title: "Users", path: "/settings/users" },
+        { title: "Profile", path: "#" },
+        { title: "Users", path: "#" },
       ],
     },
   ];

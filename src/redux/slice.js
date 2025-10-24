@@ -8,8 +8,7 @@ const formattedEnd = format(endOfDay(today), "yyyy-MM-dd HH:mm:ss.SSS");
 const initialState = {
   selectedStylecodes: [],
   startDate: formattedStart, 
-  endDate: formattedEnd,     
-
+  endDate: formattedEnd,    
 };
 
 const sliceData = createSlice({

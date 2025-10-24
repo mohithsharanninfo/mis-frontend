@@ -31,7 +31,7 @@ const DateRangePickerPopup = () => {
 
   return (
     <div className="flex gap-4 items-center ">
-      <div className=" max-w-[200px] w-full">
+      <div className=" max-w-[300px] w-full">
         <label className="block text-sm font-semibold text-[#c7a44d] ">
           From Date
         </label>
@@ -39,11 +39,11 @@ const DateRangePickerPopup = () => {
           type="date"
           value={format(start, "yyyy-MM-dd")}
           onChange={handleStartChange}
-          className="border-2 outline-amber-200 p-2 rounded w-full"
+          className="border-2 border-amber-300  outline-amber-200 p-2 rounded w-full"
         />
       </div>
 
-    <div className=" max-w-[200px] w-full">
+    <div className=" max-w-[300px] w-full">
         <label className="block text-sm font-semibold text-[#c7a44d]">
           To Date
         </label>
@@ -51,7 +51,7 @@ const DateRangePickerPopup = () => {
           type="date"
           value={format(end, "yyyy-MM-dd")}
           onChange={handleEndChange}
-          className="border-2 p-2 outline-amber-200 rounded w-full"
+          className="border-2 border-amber-300 p-2 outline-amber-200 rounded w-full"
         />
       </div>
     </div>

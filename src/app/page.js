@@ -3,29 +3,15 @@ import axios from "axios";
 import Image from "next/image";
 import { BASE_URL } from "../../constant";
 import { useEffect } from "react";
-import { useRouter } from 'next/navigation';
 import bhima_boy from '../../public/bhima_boy.png';
+import userDetails, { useUserDetails } from "@/auth";
+
 
 
 axios.defaults.withCredentials = true
 
 export default function Home() {
-
-  const router = useRouter();
-
-  const userDetails = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/getuserdetails`)
-      console.log(response?.data)
-
-    } catch (err) {
-      router.push('/login')
-    }
-  }
-
-  useEffect(() => {
-    // userDetails()
-  }, [])
+  const { user } = useUserDetails();
 
 
   return (
