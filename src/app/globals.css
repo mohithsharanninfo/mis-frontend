@@ -25,6 +25,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.ag-left-aligned-header .ag-header-cell-label {
+  justify-content: flex-start !important;
+}
+
 
 .ag-theme-alpine .ag-header-cell-label {
   font-weight: 600;

@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { BeatLoader, RingLoader } from 'react-spinners';
 import { FaFileCsv } from "react-icons/fa";
 import { useUserDetails } from '@/auth';
+import { SiTicktick } from "react-icons/si";
 
 
 const ProductImport = () => {
@@ -16,7 +17,7 @@ const ProductImport = () => {
   
     const selectedStylecodes = useSelector((state) => state?.sliceData?.selectedStylecodes)
 
-    const [fileName, setFileName] = useState('No file chosen');
+    const [fileName, setFileName] = useState('No file choosen');
     const [excelData, setExcelData] = useState([]);
     const [resultData, setResultData] = useState([])
 
@@ -29,7 +30,7 @@ const ProductImport = () => {
 
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
-        setFileName(e.target.files[0] ? e.target.files[0].name : 'No file chosen')
+        setFileName(e.target.files[0] ? e.target.files[0].name : 'No file choosen')
 
         if (!file) return;
 
@@ -101,7 +102,7 @@ const ProductImport = () => {
             <div className=' pb-10'>
                 <h1 className='text-center text-3xl my-5 border-b border-amber-200'>Product Import</h1>
                 <div className="mx-auto mt-15 bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4  max-w-md w-full">
-                    <p className='text-center'>Choose file below to import.</p>
+                    <p className='text-center'>Choose file to import.</p>
 
                     <label
                         htmlFor="file-upload"
@@ -119,7 +120,10 @@ const ProductImport = () => {
                         }
                     />
 
-                    <div className='flex flex-row justify-center items-center'>
+                    <div className='flex flex-row justify-center items-center gap-x-3'>
+                        <div>
+                           <SiTicktick color={fileName != 'No file choosen' ? 'green' : '#e9ecef'} size={24} />
+                        </div>
                         <p className="text-base text-gray-600 italic text-center border w-fit px-2.5  rounded-lg  border-amber-200">{fileName}</p>
                     </div>
 

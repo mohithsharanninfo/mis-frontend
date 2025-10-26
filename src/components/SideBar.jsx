@@ -3,10 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { MdOutlineKeyboardArrowDown ,MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { BASE_URL } from "../../constant";
+import axios from "axios";
+import { useRouter } from 'next/navigation';
+import { AiOutlineLogout } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 export default function Sidebar() {
   const [openMenus, setOpenMenus] = useState({});
+  const router = useRouter();
 
   const toggleMenu = (menu) => {
     setOpenMenus((prev) => ({ ...prev, [menu]: !prev[menu] }));
@@ -27,16 +33,28 @@ export default function Sidebar() {
       ],
     },
     {
-      title: "Settings",
+      title: "Order Reports",
       children: [
-        { title: "Profile", path: "#" },
-        { title: "Users", path: "#" },
+        { title: "Delivery Status Report", path: "/orders/deliveryStatusReport" },
       ],
     },
   ];
 
+  const LogOut = async () => {
+    try {
+
+      const response = await axios.post(`${BASE_URL}/api/logout`);
+      if (response?.data?.success) {
+        toast.success(response?.data?.message);
+        router.push('/login');
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   return (
-    <aside className="fixed top-0 left-0 h-full w-60 bg-[#8a5a20] text-white shadow-lg p-4">
+    <aside className="fixed top-0 left-0 h-full w-60 bg-[#8a5a20] text-white shadow-lg p-4 ">
       <h2 className="text-2xl font-bold mb-6">MIS APP</h2>
 
       <ul className="space-y-2">
@@ -49,7 +67,7 @@ export default function Sidebar() {
                   onClick={() => toggleMenu(item.title)}
                   className="flex items-center justify-between w-full px-3 py-2 rounded-md hover:bg-gray-800"
                 >
-                  <span>{item.title}</span>
+                  <span className="text-md">{item.title}</span>
                   {openMenus[item.title] ? (
                     <MdOutlineKeyboardArrowDown size={22} />
                   ) : (
@@ -64,7 +82,7 @@ export default function Sidebar() {
                       <li key={child.title}>
                         <Link
                           href={child.path}
-                          className="block px-3 py-2 rounded-md hover:bg-gray-800"
+                          className="block px-3 text-sm py-2 rounded-md hover:bg-gray-800"
                         >
                           {child.title}
                         </Link>
@@ -86,6 +104,8 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
+
+      <p className="flex items-center  px-3 py-2 rounded-md hover:bg-gray-800 cursor-pointer absolute bottom-20 " onClick={() => LogOut()}><AiOutlineLogout size={25} />&nbsp;LogOut</p>
     </aside>
   );
 }
