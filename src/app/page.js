@@ -1,10 +1,8 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
-import { BASE_URL } from "../../constant";
-import { useEffect } from "react";
 import bhima_boy from '../../public/bhima_boy.png';
-import userDetails, { useUserDetails } from "@/auth";
+import  { useUserDetails } from "@/auth";
 
 
 

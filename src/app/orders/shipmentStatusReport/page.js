@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import DeliveryStatusReport from '@/components/DeliveryStatusReport'
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
@@ -9,25 +8,26 @@ import { BASE_URL } from '../../../../constant';
 import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import { useUserDetails } from '@/auth';
+import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 
 
-const DeliveryStatus = () => {
+const ShipmentStatus = () => {
      const { user } = useUserDetails();
     const today = new Date();
     const dispatch = useDispatch();
 
-    const [fromDate, setFromDate] = useState(format(startOfDay(today), "yyyy-MM-dd HH:mm:ss.SSS"));
-    const [toDate, setToDate] = useState(format(endOfDay(today), "yyyy-MM-dd HH:mm:ss.SSS"));
+    const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
+    const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
     const [searchTerm, setSearchTerm] = useState('')
 
     const handleStartChange = (e) => {
         const selected = startOfDay(new Date(e.target.value));
-        setFromDate(format(selected, "yyyy-MM-dd HH:mm:ss.SSS"));
+        setFromDate(format(selected, "yyyy-MM-dd"));
     };
 
     const handleEndChange = (e) => {
         const selected = endOfDay(new Date(e.target.value));
-        setToDate(format(selected, "yyyy-MM-dd HH:mm:ss.SSS"));
+        setToDate(format(selected, "yyyy-MM-dd"));
     };
 
     const getDeliveryStatus = async () => {
@@ -59,7 +59,7 @@ const DeliveryStatus = () => {
 
     return (
         <div className="min-h-screen">
-            <h1 className='text-center text-3xl my-5 border-b border-amber-200'>Delivery Status Report</h1>
+            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Delivery Status Report</h1>
 
             <div className='flex items-center justify-between'>
 
@@ -93,7 +93,7 @@ const DeliveryStatus = () => {
                     <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
                     <div className='flex flex-row justify-end items-center gap-2 '>
                         <div className='w-full'>
-                            <input type="text" placeholder='Sku | Order no...' onChange={(e) => {
+                            <input type="search" placeholder='Aw no | Order no...' onChange={(e) => {
                                 setSearchTerm(e.target.value)
                                 if (e.target.value === '') {
                                     getDeliveryStatus()
@@ -107,10 +107,10 @@ const DeliveryStatus = () => {
             </div>
 
             <div>
-                <DeliveryStatusReport />
+                <ShipmentStatusReport />
             </div>
         </div>
     )
 }
 
-export default DeliveryStatus
+export default ShipmentStatus

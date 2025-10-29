@@ -46,6 +46,11 @@ const AgGridTable = ({ rowData }) => {
         {
             field: "Stylecode", headerName: 'Stylecode', flex: 1, minWidth: 200, wrapText: true,
             autoHeight: true,
+               cellRenderer: (params) => {
+                return (
+                  <p className='cursor-pointer' title='click to copy'  onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                );
+            },
         },
         {
             field: "Name", headerName: 'Title', flex: 1, minWidth: 200, wrapText: true,

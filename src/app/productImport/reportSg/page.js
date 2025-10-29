@@ -58,7 +58,7 @@ const ReportSg = () => {
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-3xl my-5 border-b border-amber-200'>Report-SG</h1>
+      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-SG</h1>
       <div className='flex items-center justify-between'>
         <div className="flex gap-4 items-center  ">
           <div className=" max-w-[300px] w-full">

@@ -15,8 +15,14 @@ const ReportInTable = () => {
     const dataIn = useSelector((state) => state?.sliceData?.importDataIn);
 
     const [colDefs] = useState([
-        { field: "barcode_no", headerName: "Sku", flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
-        { field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+        { field: "sku", headerName: "Sku", flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
+        { field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, 
+              cellRenderer: (params) => {
+                return (
+                  <p className='cursor-pointer' title='click to copy' onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                );
+            },
+        },
         {
             field: "ExportedUrlKey",
             headerName: 'Product Url',
@@ -34,7 +40,7 @@ const ReportInTable = () => {
             },
         },
         { field: "productpushed", headerName: 'Product Pushed', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-        { field: "branch_code", headerName: 'Branch', flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
+        { field: "ListingBranchCode", headerName: 'Branch', flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
 
     ]);
 

@@ -15,10 +15,10 @@ export default function ClientLayout({ children }) {
     <>
       {showSidebar && <Sidebar />}
       <main style={{ marginLeft: showSidebar ? "250px" : "0" }}>
-        <div>
-            
+        <div id="root">
+          {children}
         </div>
-        {children}
+
         <ToastContainer
           position="top-right"
           autoClose={1500}
