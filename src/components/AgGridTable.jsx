@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setSelectedStylecodes } from '@/redux/slice';
 
 ModuleRegistry.registerModules([AllCommunityModule]);

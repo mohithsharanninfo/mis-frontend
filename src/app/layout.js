@@ -1,19 +1,15 @@
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import axios from "axios";
 import { Providers } from "./Provider";
 import ClientLayout from "./ClientLayout"; 
 
 axios.defaults.withCredentials = true;
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const nunito = Nunito_Sans({
+  subsets: ['latin'],
+  variable: '--font-nunito',
+  weight: ['400', '600', '700'],
 });
 
 export const metadata = {
@@ -24,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body  className={`${geistSans.variable} ${geistMono.variable} antialiased mx-10`}>
+      <body  className={`${nunito.variable} antialiased mx-10`}>
         <Providers>
           <ClientLayout>{children}</ClientLayout>
         </Providers>

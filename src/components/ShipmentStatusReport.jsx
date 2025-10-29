@@ -24,10 +24,11 @@ const ShipmentStatusReport = () => {
     const closeModal = () => setShowModal(false);
 
     const [colDefs] = useState([
-        { field: "ecomorderid", headerName: "Order No", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
-             cellRenderer: (params) => {
+        {
+            field: "ecomorderid", headerName: "Order No", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => {
                 return (
-                  <p className='cursor-pointer' title='click to copy' onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -42,22 +43,16 @@ const ShipmentStatusReport = () => {
             autoHeight: true,
             headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => {
-                const url = params.value == 'Sequel' || params.value == 'sequel247' ? `${SEQUEL_TRACK}${params.value}` :
-                    params.value == 'bluedart' ? `${BLUEDART_TRACK}${params.value}` : params.value;
                 return (
                     <>
                         {
                             params.value && params.value != 'null' &&
-                           <p className='cursor-pointer' title='click to copy' onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                            <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                         }
                     </>
                 );
             },
         },
-
-        //{ field: "mobile_no", headerName: 'Mobile No', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, headerClass: 'ag-left-aligned-header', },
-
-        //{ field: "cust_name", headerName: 'Customer', flex: 1, minWidth: 100, wrapText: false, autoHeight: true, },
 
         {
             field: "logisticPartner", headerName: 'Logistics', flex: 1, minWidth: 100, wrapText: true,
@@ -130,21 +125,24 @@ const ShipmentStatusReport = () => {
             },
         },
 
-        // {
-        //     field: "action",
-        //     headerName: 'Action',
-        //     flex: 1,
-        //     maxWidth: 100,
-        //     cellRenderer: (params) => (
-        //         <p onClick={() => {
-        //             setModalData(params?.data)
-        //             openModal()
-        //             console.log(params?.data)
-        //         }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">View more</p>
-        //     )
-        // }
+        {
+            field: "action",
+            headerName: 'Action',
+            flex: 1,
+            maxWidth: 100,
+            headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => (
+                <p onClick={() => {
+                    setModalData(params?.data)
+                    openModal()
+                }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">Track</p>
+            )
+        }
 
     ]);
+
+    const track_url = modalData?.logisticPartner?.toLowerCase() == 'sequel' || modalData?.logisticPartner?.toLowerCase() == 'sequel247' ? `${SEQUEL_TRACK}${modalData?.AwNo}` :
+        modalData?.logisticPartner?.toLowerCase() == 'bluedart' ? `${BLUEDART_TRACK}${modalData?.AwNo}` : '#';
 
 
     return (
@@ -171,53 +169,33 @@ const ShipmentStatusReport = () => {
             <div>
                 {showModal && (
                     <Modal onClose={closeModal}>
-                        <p className='text-center font-bold border-b-1 '>Summary</p>
-                        <div className='flex flex-col gap-3 text-black my-2 '>
+                        <p className='text-center font-bold border-b-1 pb-2 '>Order Track</p>
+                        <div className='flex flex-col gap-y-5 text-black mb-2 mt-4'>
                             <div>
-                                <p className='font-semibold flex items-center gap-x-2'>Order No : <span className='font-medium'>{modalData?.order_no}</span> <span className='cursor-pointer' onClick={() => {
-                                    navigator.clipboard.writeText(modalData?.order_no);
+                                <p className='font-semibold flex items-center gap-x-2'>Order No : <span className='font-medium'>{modalData?.ecomorderid}</span> <span className='cursor-pointer' onClick={() => {
+                                    navigator.clipboard.writeText(modalData?.ecomorderid);
                                     toast.success('Order No copied to clipboard!');
 
                                 }}><MdContentCopy /></span></p>
                             </div>
                             <div>
-                                <p className='font-semibold flex items-center gap-x-2'>Sku : <span className='font-medium'>{modalData?.barcode_no}</span> <span className='cursor-pointer' onClick={() => {
-                                    navigator.clipboard.writeText(modalData?.barcode_no);
-                                    toast.success('Sku copied to clipboard!');
+                                <p className='font-semibold flex items-center gap-x-2'>Aw No: <Link href={track_url}
+                                    target="_blank" rel="noopener noreferrer" className='text-blue-500 underline'>{modalData?.AwNo}</Link> <span className='cursor-pointer' onClick={() => {
+                                        navigator.clipboard.writeText(modalData?.AwNo);
+                                        toast.success('AW No. copied to clipboard!');
 
-                                }}><MdContentCopy /></span></p>
+                                    }}><MdContentCopy /></span></p>
                             </div>
                             <div>
+                                <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
+                            </div>
+                            {/* <div>
                                 <p className='font-semibold'>Mobile No :<span className='font-medium'>{modalData?.mobile_no}</span></p>
                             </div>
 
                             <div>
                                 <p className='font-semibold'>Customer Name :<span className='font-medium capitalize'>{modalData?.cust_name}</span></p>
-                            </div>
-                            <div>
-                                <p className='font-semibold'>Branch Order No: <span className='font-medium capitalize'>{modalData?.branch_order_no}</span></p>
-                            </div>
-
-                            <div>
-                                <p className='font-semibold'>Aw No: <span className='font-medium'>{modalData?.Awno && modalData?.Awno != 'null' ? modalData?.Awno : 'Not Generated'}</span></p>
-                            </div>
-                            <div>
-                                <p className='font-semibold'>Status: <span className='font-medium'>{modalData?.Status}</span></p>
-                            </div>
-                            <div>
-                                <p className='font-semibold'>Order Date: <span className='font-medium'>{modalData?.order_date}</span></p>
-                            </div>
-                            <div>
-                                <p className='font-semibold '>{modalData.Status.charAt(0).toUpperCase() + modalData.Status.slice(1).toLowerCase()} On: <span className='font-medium'>{modalData?.Createdon}</span></p>
-                            </div>
-
-                            <div>
-                                <p className='font-semibold'>Delivery Date : <span className='font-medium'>{modalData?.delivery_date}</span></p>
-                            </div>
-                            <div>
-                                <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
-                            </div>
-
+                            </div> */}
                         </div>
                     </Modal>
                 )}

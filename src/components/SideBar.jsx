@@ -83,7 +83,7 @@ export default function Sidebar() {
                       <li key={child.title}>
                         <Link
                           href={child.path}
-                          className="block px-3 text-sm py-2 rounded-md hover:bg-gray-800"
+                          className="block px-3 text-sm py-1 rounded-md hover:bg-gray-800"
                         >
                           {child.title}
                         </Link>

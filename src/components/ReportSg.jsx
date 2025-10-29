@@ -6,8 +6,6 @@ import {  PRODUCT_URL_SG } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
-
-
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ReportSgTable = () => {
