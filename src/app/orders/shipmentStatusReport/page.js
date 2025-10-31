@@ -103,7 +103,6 @@ const ShipmentStatus = () => {
                         <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
                     </div>
                 </div>
-                
             </div>
 
             <div>

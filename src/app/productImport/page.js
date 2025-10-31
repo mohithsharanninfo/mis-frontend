@@ -6,20 +6,23 @@ import { BASE_URL } from '../../../constant';
 import AgGridTable from '@/components/AgGridTable';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { BeatLoader, RingLoader } from 'react-spinners';
+import {  RingLoader } from 'react-spinners';
 import { FaFileCsv } from "react-icons/fa";
 import { useUserDetails } from '@/auth';
 import { SiTicktick } from "react-icons/si";
+import { CiSearch } from "react-icons/ci";
 
 
 const ProductImport = () => {
-  const { user } = useUserDetails();
-  
+    const { user } = useUserDetails();
+
     const selectedStylecodes = useSelector((state) => state?.sliceData?.selectedStylecodes)
 
     const [fileName, setFileName] = useState('No file choosen');
     const [excelData, setExcelData] = useState([]);
     const [resultData, setResultData] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
+    const [searchResult, setSearchResult] = useState([])
 
     const [loadExcel, setLoadExcel] = useState(false)
     const [loadImport, setLoadImport] = useState(false)
@@ -83,7 +86,7 @@ const ProductImport = () => {
 
             if (result?.success === true) {
                 toast.success(result?.message);
-            }else{
+            } else {
                 toast.error('Something went wrong !');
             }
         } catch (err) {
@@ -94,6 +97,17 @@ const ProductImport = () => {
             setTimeout(() => {
                 window.location.reload()
             }, 2500)
+        }
+    }
+
+
+    const stylecodesFilter = async () => {
+        try {
+            const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`);
+            const allStylecodes = await result?.data?.data;
+            setSearchResult(allStylecodes)
+        } catch (err) {
+            throw new Error(err)
         }
     }
 
@@ -122,7 +136,7 @@ const ProductImport = () => {
 
                     <div className='flex flex-row justify-center items-center gap-x-3'>
                         <div>
-                           <SiTicktick color={fileName != 'No file choosen' ? 'green' : '#e9ecef'} size={24} />
+                            <SiTicktick color={fileName != 'No file choosen' ? 'green' : '#e9ecef'} size={24} />
                         </div>
                         <p className="text-base text-gray-600 italic text-center border w-fit px-2.5  rounded-lg  border-amber-200">{fileName}</p>
                     </div>
@@ -146,14 +160,29 @@ const ProductImport = () => {
                     </div>
                 </div>
 
-
                 {resultData.length > 0 && !loadExcel ?
                     <div>
-                        <div className='flex justify-start items-center gap-x-6'>
-                            <p>Stylecodes:{resultData?.length}</p>
+                        <div className='flex justify-between items-center'>
+                            <div className='flex justify-start items-center gap-x-6'>
+                                <p>Stylecodes:{resultData?.length}</p>
                                 <p>Selected:{selectedStylecodes?.length}</p>
+                            </div>
+
+                            <div className='flex flex-row justify-end items-center gap-2 w-full max-w-[250px] '>
+                                <div className='w-full'>
+                                    <input type="search" placeholder='Sku | Stylecode...' onChange={(e) => {
+                                        setSearchTerm(e.target.value)
+                                        if (e.target.value === '') {
+                                            fetchStyleCodeImage()
+                                            setSearchResult([])
+                                        }
+
+                                    }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                                </div>
+                                <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => stylecodesFilter()} > <CiSearch color='white' size={24} /></div>
+                            </div>
                         </div>
-                        <AgGridTable rowData={resultData} />
+                        <div className='py-5'><AgGridTable rowData={resultData} searchResult={searchResult} searchTerm={searchTerm} /></div>
                         <div className="mx-auto flex lg:flex-row flex-col max-w-2xl w-full lg:gap-x-10 gap-5 ">
                             <button
                                 onClick={() => importStylecodes()}

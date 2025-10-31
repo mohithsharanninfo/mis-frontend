@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useDispatch } from 'react-redux';
@@ -6,7 +6,7 @@ import { setSelectedStylecodes } from '@/redux/slice';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const AgGridTable = ({ rowData }) => {
+const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
     const dispatch = useDispatch()
     const gridRef = useRef();
 
@@ -46,9 +46,9 @@ const AgGridTable = ({ rowData }) => {
         {
             field: "Stylecode", headerName: 'Stylecode', flex: 1, minWidth: 200, wrapText: true,
             autoHeight: true,
-               cellRenderer: (params) => {
+            cellRenderer: (params) => {
                 return (
-                  <p className='cursor-pointer' title='click to copy'  onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -66,31 +66,60 @@ const AgGridTable = ({ rowData }) => {
         { field: "LocaleUS", headerName: 'LocaleUS', flex: 1, minWidth: 100 },
     ]);
 
-
     const onSelectionChanged = () => {
         const selectedData = gridRef.current.api.getSelectedRows();
         dispatch(setSelectedStylecodes(selectedData))
     };
 
+    const moveRowToTop = (term) => {
+        const api = gridRef.current?.api;
+        if (!api || !term) return;
+
+        const matchedRows = [];
+
+        api.forEachNode((node) => {
+            if (node.data?.Stylecode?.toLowerCase() === term.toLowerCase()) {
+                matchedRows.push(node.data);
+            }
+               if (node.data?.Sku?.toLowerCase() === term.toLowerCase()) {
+                matchedRows.push(node.data);
+            }
+        });
+
+        if (matchedRows?.length > 0) {
+            api.applyTransaction({ remove: matchedRows });
+            api.applyTransaction({ add: matchedRows, addIndex: 0 });
+        }
+    };
+
+    useEffect(() => {
+        if (searchTerm) {
+            moveRowToTop(searchTerm);
+        }
+    }, [searchTerm]);
 
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
-            <div className='w-full my-8 '>
+            <div className='w-full  h-fit max-h-[700px]'>
                 <AgGridReact
                     ref={gridRef}
-                      theme="legacy"
+                    theme="legacy"
                     rowHeight={100}
                     rowData={rowData}
                     columnDefs={colDefs}
                     rowSelection="multiple"
                     onSelectionChanged={onSelectionChanged}
                     suppressRowClickSelection={true}
+                    getRowClass={(params) => {
+                        return searchResult?.some(p => p?.Sku === params?.data?.Sku)? 'highlight-row' : 
+                       '';
+                    }}
                     defaultColDef={{
                         resizable: false,
                         sortable: false,
                         filter: false,
                         suppressMovable: true,
-                        cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center' }
+                        cellStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', borderRight: '1px solid #d3d3d3' }
                     }}
                     domLayout="autoHeight"
                 />

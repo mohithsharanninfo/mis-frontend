@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: linear-gradient(to bottom, #fff8e1, #ffffff);
+    --foreground: #b8860b;
   }
 }
 
@@ -24,6 +24,31 @@ body {
   color: var(--foreground);
   font-family: "Nunito Sans", sans-serif;
 }
+
+
+/* Scrollbar track */
+::-webkit-scrollbar {
+  width: 4px; /* vertical scrollbar */
+  height: 6px; /* horizontal scrollbar */
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #dbb985;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #cd9a50;
+}
+
 
 .ag-left-aligned-header .ag-header-cell-label {
   justify-content: flex-start !important;
@@ -46,23 +71,20 @@ body {
 } */
 
 .ag-theme-alpine .ag-header {
-/* background-color: #8c5c34; */
-background: linear-gradient(103.45deg, rgb(97, 65, 25) -11.68%, rgb(205, 154, 80) 48.54%, rgb(97, 65, 25) 108.76%);
-height: 40px !important;
-padding: 6px;
-border-top-left-radius: 10px;
-border-top-right-radius: 10px;
+  /* background-color: #8c5c34; */
+  background: linear-gradient(103.45deg, rgb(97, 65, 25) -11.68%, rgb(205, 154, 80) 48.54%, rgb(97, 65, 25) 108.76%);
+  height: 40px !important;
+  padding: 6px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .ag-root-wrapper {
   border-radius: 10px !important;
 }
 
-
-
-
 .ag-theme-alpine .ag-row.ag-row-selected .ag-cell {
-    border: none !important;
+  border: none !important;
 }
 
 .ag-theme-alpine .ag-cell:focus,
@@ -91,4 +113,9 @@ border-top-right-radius: 10px;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-row {
+  background-color: #cd9a50 !important;
+  color: white !important;
 }
