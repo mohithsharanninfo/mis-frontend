@@ -94,9 +94,9 @@ const ProductImport = () => {
             throw new Error(err)
         } finally {
             setLoadImport(false)
-            setTimeout(() => {
-                window.location.reload()
-            }, 2500)
+            // setTimeout(() => {
+            //     window.location.reload()
+            // }, 2500)
         }
     }
 

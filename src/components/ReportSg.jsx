@@ -38,7 +38,7 @@ const ReportSgTable = () => {
                 );
             },
         },
-        { field: "productpushedsg", headerName: 'Product Pushed', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
+        { field: "productpushed", headerName: 'Product Pushed', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
         { field: "ListingBranchCode", headerName: 'Branch', flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
         // {
         //     field: "action",
