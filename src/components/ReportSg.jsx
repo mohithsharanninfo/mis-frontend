@@ -2,23 +2,32 @@
 import React, { useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import {  PRODUCT_URL_SG } from '../../constant';
+import { BASE_URL, PRODUCT_URL_SG } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import Modal from './ReactModal';
+import ModalDetailsTable from './ModalTableData';
+import axios from 'axios';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ReportSgTable = () => {
 
     const dataSg = useSelector((state) => state?.sliceData?.importDataSg);
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState([]);
+
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
 
     const [colDefs] = useState([
         { field: "sku", headerName: "Sku", flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
-        { field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, 
+        {
+            field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
 
-               cellRenderer: (params) => {
+            cellRenderer: (params) => {
                 return (
-                  <p className='cursor-pointer' title='click to copy'  onClick={()=>navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
                 );
             },
         },
@@ -39,19 +48,42 @@ const ReportSgTable = () => {
             },
         },
         { field: "productpushed", headerName: 'Product Pushed', flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
-        { field: "ListingBranchCode", headerName: 'Branch', flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
-        // {
-        //     field: "action",
-        //     headerName: 'Action',
-        //     flex: 1,
-        //     maxWidth: 100,
-        //     cellRenderer: (params) => (
-        //         <p onClick={() => console.log(params?.data)} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">View</p>
-        //     )
-        // }
 
+        {
+            field: "action",
+            headerName: 'Action',
+            flex: 1,
+            maxWidth: 100,
+            headerClass: 'ag-left-aligned-header',
+            cellRenderer: (params) => (
+                <p onClick={() => {
+                    checkStylecodeData(params?.data)
+                    openModal()
+                }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">Check</p>
+            )
+        }
     ]);
 
+
+    const checkStylecodeData = async (data) => {
+        try {
+
+            const payload = {
+                Stylecode: data.StyleCode,
+                sku: data.sku,
+                listingBranchCode: data.ListingBranchCode
+            }
+
+            const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload);
+
+            const result = await response?.data?.data;
+            setModalData(result)
+
+        } catch (err) {
+            throw new Error(err)
+        }
+
+    }
 
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
@@ -73,6 +105,16 @@ const ReportSgTable = () => {
                     domLayout="autoHeight"
                     copyHeadersToClipboard={true}
                 />
+            </div>
+              <div>
+                {showModal && (
+                    <Modal onClose={closeModal}>
+                        <p className='text-center font-bold border-b-1 pb-2 '>Summary</p>
+                        <div className="overflow-x-auto mt-4 mb-2 text-black">
+                          <ModalDetailsTable modalData={modalData} LocaleIN={0} LocaleSG={1}/>
+                        </div>
+                    </Modal>
+                )}
             </div>
         </div>
     )
