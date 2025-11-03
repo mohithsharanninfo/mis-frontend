@@ -1,15 +1,19 @@
 import { MdContentCopy } from "react-icons/md";
 import { toast } from 'react-toastify';
-import { BASE_URL } from "../../constant";
+import { BASE_URL, PRODUCT_IMAGE_URL } from "../../constant";
 import axios from "axios";
+import { useState } from "react";
 
-export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG }) {
+export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, StyleCode }) {
+
+    const [images, setImages] = useState([])
+
     const handleCopy = (text, label) => {
         navigator.clipboard.writeText(text);
         toast.success(`${label} copied to clipboard!`);
     };
 
-    const reImportStylecode = async (StyleCode) => {
+    const reImportStylecode = async () => {
         try {
             const response = await axios.post(`${BASE_URL}/api/re_importStylecode`, {
                 Stylecode: StyleCode,
@@ -20,13 +24,30 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG }
             })
 
             const result = await response.data
-            console.log('result', result)
             if (result?.success == true) {
                 toast.success(result?.message);
             }
 
         } catch (err) {
             toast.success('Import failed unexpectedly');
+            throw new Error(err)
+        }
+    }
+
+    const ViewImages = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/api/getProductImages`, {
+                Stylecode: StyleCode
+            })
+
+            const result = await response.data
+            if (result?.success == true && result?.data?.length > 0) {
+                setImages(result?.data)
+            } else {
+                toast.warn('No Images to display!');
+            }
+
+        } catch (err) {
             throw new Error(err)
         }
     }
@@ -43,9 +64,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG }
                         <th className="px-4 py-2 border">Sold Flag</th>
                         <th className="px-4 py-2 border">Is Lock</th>
                         <th className="px-4 py-2 border">Is Stock</th>
-                        <th className="px-4 py-2 border">Img Url</th>
                         <th className="px-4 py-2 border">Branch Code</th>
-                        <th className="px-4 py-2 border">Action</th>
                     </tr>
                 </thead>
 
@@ -73,11 +92,8 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG }
                             <td className="px-4 py-2 border capitalize">{item.sold_flag}</td>
                             <td className="px-4 py-2 border">{item.islock}</td>
                             <td className="px-4 py-2 border">{item.isstock}</td>
-                            <td className="px-4 py-2 border">{item.ImageURL}</td>
                             <td className="px-4 py-2 border">{item.branch_code}</td>
-                            <td onClick={() => reImportStylecode(item.StyleCode)} className="px-4 py-2 border cursor-pointer font-semibold underline text-blue-600">
-                                Re-Import
-                            </td>
+
                         </tr>
                     ))}
 
@@ -90,6 +106,55 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG }
                     )}
                 </tbody>
             </table>
+
+            <div className="w-full flex justify-center gap-x-5">
+                <div>
+                    <button onClick={() => reImportStylecode()}
+                        className={`w-fit px-2 bg-gradient-to-r from-[#b48244] via-[#d4af37] to-[#b48244] 
+               text-white py-1 rounded-md mt-4  transition-opacity duration-200 flex justify-center items-center gap-2
+               ${modalData?.length <= 0 ? 'opacity-25 cursor-not-allowed' : 'hover:opacity-90 cursor-pointer'}
+               `}
+                        disabled={modalData?.length <= 0 ? true : false}
+                    >
+                        Re-Import Stylecode
+                    </button>
+                </div>
+
+                <div>
+                    <button onClick={() => ViewImages()}
+                        className={`w-fit px-2 bg-gradient-to-r from-[#b48244] via-[#d4af37] to-[#b48244] 
+               text-white py-1 rounded-md mt-4  transition-opacity duration-200 flex justify-center items-center gap-2
+               ${modalData?.length <= 0 ? 'opacity-25 cursor-not-allowed' : 'hover:opacity-90 cursor-pointer'}
+               `}
+                        disabled={modalData?.length <= 0 ? true : false}
+                    >
+                        View Images
+                    </button>
+                </div>
+            </div>
+
+            {
+                images?.length > 0 && <div>
+                    <div className="flex justify-center items-center gap-x-3 ">
+                        {
+                            images?.map((item, i) => {
+                                return (
+                                    <div key={item.SlNo} className="my-8">
+                                        <div className="w-36 h-36 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
+                                            <img
+                                                src={`${PRODUCT_IMAGE_URL}${item.ImageURL}`}
+                                                alt="Product Image"
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </div>
+                                        <p className="text-center mt-2">SlNo: {item?.SlNo}</p>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
+            }
         </div>
     );
 }

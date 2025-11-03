@@ -16,12 +16,13 @@ const ReportSgTable = () => {
     const dataSg = useSelector((state) => state?.sliceData?.importDataSg);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
+    const [styleCode, setStyleCode] = useState('')
 
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
 
     const [colDefs] = useState([
-        { field: "sku", headerName: "Sku", flex: 1, maxWidth: 100, wrapText: true, autoHeight: true, },
+        { field: "sku", headerName: "Sku", flex: 1, minWidth: 100, wrapText: true, autoHeight: true, },
         {
             field: "StyleCode", headerName: 'Stylecode', flex: 1, minWidth: 100, wrapText: true, autoHeight: true,
 
@@ -67,11 +68,11 @@ const ReportSgTable = () => {
 
     const checkStylecodeData = async (data) => {
         try {
+            setStyleCode(data?.StyleCode)
 
             const payload = {
-                Stylecode: data.StyleCode,
-                sku: data.sku,
-                listingBranchCode: data.ListingBranchCode
+                Stylecode: data?.StyleCode,
+                sku: data?.sku,
             }
 
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload);
@@ -106,12 +107,12 @@ const ReportSgTable = () => {
                     copyHeadersToClipboard={true}
                 />
             </div>
-              <div>
+            <div>
                 {showModal && (
                     <Modal onClose={closeModal}>
                         <p className='text-center font-bold border-b-1 pb-2 '>Summary</p>
                         <div className="overflow-x-auto mt-4 mb-2 text-black">
-                          <ModalDetailsTable modalData={modalData} LocaleIN={0} LocaleSG={1}/>
+                            <ModalDetailsTable modalData={modalData} LocaleIN={0} LocaleSG={1} StyleCode={styleCode} />
                         </div>
                     </Modal>
                 )}
