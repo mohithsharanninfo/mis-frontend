@@ -1,3 +1,5 @@
+'use client'
+
 "use client";
 import { AgGridReact } from 'ag-grid-react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -12,9 +14,9 @@ import { format } from 'date-fns';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const ShipmentStatusReport = () => {
+const PickedItemsOnlyReport = () => {
 
-    const shipmentStatusData = useSelector((state) => state?.sliceData?.deliveryStatusData);
+    const deliveryStatusData = useSelector((state) => state?.sliceData?.deliveryStatusData);
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
@@ -148,12 +150,12 @@ const ShipmentStatusReport = () => {
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <p className='my-2 font-semibold text-[#614119]'>Total:{shipmentStatusData?.length}</p>
+                <p className='my-2 font-semibold text-[#614119]'>Total:{deliveryStatusData?.length}</p>
                 <AgGridReact
                     //ref={gridRef}
                     theme="legacy"
                     rowHeight={40}
-                    rowData={shipmentStatusData}
+                    rowData={deliveryStatusData}
                     columnDefs={colDefs}
                     defaultColDef={{
                         resizable: false,
@@ -189,13 +191,7 @@ const ShipmentStatusReport = () => {
                             <div>
                                 <p className='font-semibold'>Logistic Partner : <span className='font-medium'> {modalData?.logisticPartner && modalData?.logisticPartner != 'null' ? modalData?.logisticPartner : 'Not Assigned'}</span></p>
                             </div>
-                            {/* <div>
-                                <p className='font-semibold'>Mobile No :<span className='font-medium'>{modalData?.mobile_no}</span></p>
-                            </div>
-
-                            <div>
-                                <p className='font-semibold'>Customer Name :<span className='font-medium capitalize'>{modalData?.cust_name}</span></p>
-                            </div> */}
+                        
                         </div>
                     </Modal>
                 )}
@@ -206,4 +202,4 @@ const ShipmentStatusReport = () => {
     )
 }
 
-export default ShipmentStatusReport
+export default PickedItemsOnlyReport

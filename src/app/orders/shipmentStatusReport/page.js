@@ -30,9 +30,9 @@ const ShipmentStatus = () => {
         setToDate(format(selected, "yyyy-MM-dd"));
     };
 
-    const getDeliveryStatus = async () => {
+    const getShipmentStatus = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/deliveryStatus?fromDate=${fromDate}&toDate=${toDate}`);
+            const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`);
             const result = await response?.data?.data
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
@@ -53,13 +53,13 @@ const ShipmentStatus = () => {
 
 
     useEffect(() => {
-        getDeliveryStatus()
+        getShipmentStatus()
     }, [fromDate, toDate])
 
 
     return (
         <div className="min-h-screen">
-            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Delivery Status Report</h1>
+            <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Shipment Status Report</h1>
 
             <div className='flex items-center justify-between'>
 
@@ -96,7 +96,7 @@ const ShipmentStatus = () => {
                             <input type="search" placeholder='Aw no | Order no...' onChange={(e) => {
                                 setSearchTerm(e.target.value)
                                 if (e.target.value === '') {
-                                    getDeliveryStatus()
+                                    getShipmentStatus()
                                 }
                             }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
                         </div>
