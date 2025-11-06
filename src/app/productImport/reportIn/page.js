@@ -32,7 +32,7 @@ const ReportIn = () => {
 
   const getReportsIn = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/importedProducts?fromDate=${fromDate}&toDate=${toDate}`);
+      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`);
       const result = await response?.data?.data
       dispatch(setImportedDataIn(result))
     } catch (err) {

@@ -30,7 +30,7 @@ const ReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/importedProductsSg?fromDate=${fromDate}&toDate=${toDate}`)
+    const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`);
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
