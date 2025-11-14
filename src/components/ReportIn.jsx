@@ -77,7 +77,6 @@ const ReportInTable = () => {
             }
 
             const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload);
-
             const result = await response?.data?.data;
             setModalData(result)
         } catch (err) {

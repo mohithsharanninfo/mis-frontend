@@ -5,5 +5,4 @@ export const SEQUEL_TRACK = 'https://sequel247.com/track/'
 export const BLUEDART_TRACK = 'https://trackcourier.io/track-and-trace/blue-dart-courier/'
 export const PRODUCT_IMAGE_URL = 'https://productimages.bhimagold.com/'
 
-//export const BASE_URL='https://mis-backend-ruddy.vercel.app'
 //export const BASE_URL='http://192.168.10.65:9000'

@@ -52,16 +52,18 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
         }
     }
 
+    const isNotNumber = /[^0-9]/.test(modalData?.map((item=>{return (item.SKU)})));
+
     return (
         <div className="overflow-x-auto mt-4 mb-2">
             <table className="min-w-full border border-gray-300 text-sm text-left text-gray-700">
                 <thead className="bg-gray-100 text-gray-900">
                     <tr>
-                        <th className="px-4 py-2 border">Barcode No</th>
+                        <th className="px-4 py-2 border">Sku</th>
                         <th className="px-4 py-2 border">Stylecode</th>
                         <th className="px-4 py-2 border">Product Pushed</th>
-                        <th className="px-4 py-2 border">Order No</th>
-                        <th className="px-4 py-2 border">Sold Flag</th>
+                       {isNotNumber ? '': <th className="px-4 py-2 border">Order No</th>}
+                       {isNotNumber ? '':<th className="px-4 py-2 border">Sold Flag</th>} 
                         <th className="px-4 py-2 border">Is Lock</th>
                         <th className="px-4 py-2 border">Is Stock</th>
                         <th className="px-4 py-2 border">Branch Code</th>
@@ -72,32 +74,32 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                     {modalData?.map((item, index) => (
                         <tr key={index} className="border-t hover:bg-gray-50">
                             <td className="px-4 py-2 border  gap-x-2">
-                                <p className="flex items-center  gap-x-2 ">{item.barcode_no} <MdContentCopy
+                                <p className="flex items-center  gap-x-2 ">{item?.SKU} <MdContentCopy
                                     className="cursor-pointer text-gray-600 hover:text-gray-900"
-                                    onClick={() => handleCopy(item.barcode_no, "barcode_no")}
+                                    onClick={() => handleCopy(item?.SKU, "barcode_no")}
                                 /></p>
 
                             </td>
 
                             <td className="px-4 py-2 border ">
-                                <p className="flex items-center  gap-x-2 ">{item.StyleCode} <MdContentCopy
+                                <p className="flex items-center  gap-x-2 ">{item?.StyleCode} <MdContentCopy
                                     className="cursor-pointer text-gray-600 hover:text-gray-900"
-                                    onClick={() => handleCopy(item.StyleCode, "Stylecode")}
+                                    onClick={() => handleCopy(item?.StyleCode, "Stylecode")}
                                 /></p>
 
                             </td>
 
-                            <td className="px-4 py-2 border capitalize">{item.productpushed}</td>
-                            <td className="px-4 py-2 border capitalize">{item.order_no}</td>
-                            <td className="px-4 py-2 border capitalize">{item.sold_flag}</td>
-                            <td className="px-4 py-2 border">{item.islock}</td>
-                            <td className="px-4 py-2 border">{item.isstock}</td>
-                            <td className="px-4 py-2 border">{item.branch_code}</td>
+                            <td className="px-4 py-2 border capitalize">{item?.productpushed}</td>
+                           {isNotNumber ?'': <td className="px-4 py-2 border capitalize">{item?.order_no}</td>}
+                           {isNotNumber ?'': <td className="px-4 py-2 border capitalize">{item?.sold_flag}</td>}
+                            <td className="px-4 py-2 border">{item?.islock}</td>
+                            <td className="px-4 py-2 border">{item?.isstock}</td>
+                            <td className="px-4 py-2 border">{item?.branch_code}</td>
 
                         </tr>
                     ))}
 
-                    {modalData.length === 0 && (
+                    {modalData?.length === 0 && (
                         <tr>
                             <td colSpan="10" className="text-center py-4 text-gray-500">
                                 No records found
@@ -135,11 +137,11 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
 
             {
                 images?.length > 0 && <div>
-                    <div className="flex justify-center items-center gap-x-3 ">
+                    <div className="flex justify-center items-center gap-x-3 overflow-x-scroll ">
                         {
                             images?.map((item, i) => {
                                 return (
-                                    <div key={item.SlNo} className="my-8">
+                                    <div key={item?.ID} className="my-8">
                                         <div className="w-36 h-36 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg">
                                             <img
                                                 src={`${PRODUCT_IMAGE_URL}${item.ImageURL}`}
