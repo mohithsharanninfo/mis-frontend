@@ -2,16 +2,14 @@
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import { ExcelExportModule } from 'ag-grid-enterprise'
 import { BASE_URL, PRODUCT_URL } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import axios from 'axios';
-
 import ModalDetailsTable from './ModalTableData';
 
-ModuleRegistry.registerModules([AllCommunityModule, ExcelExportModule]);
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ReportInTable = () => {
 
@@ -59,7 +57,6 @@ const ReportInTable = () => {
             headerName: 'Action',
             flex: 1,
             maxWidth: 100,
-            suppressExcelExport: true,
             headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => (
                 <p onClick={() => {
@@ -89,14 +86,32 @@ const ReportInTable = () => {
         }
     }
 
-    const exportToExcel = () => {
-          //gridRef.current.api.sizeColumnsToFit();
-        gridRef.current.api.exportDataAsExcel({
-            fileName: `Report_${Date.now()}.xlsx`,
-            sheetName: "Report",
-            suppressColumnOutline: false,
-        });
+
+
+    const ExportExcel = async () => {
+        try {
+            const response = await axios.post(
+                `${BASE_URL}/api/export-excel`,
+                dataIn,
+                {
+                    responseType: "blob"
+                }
+            );
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `report_${Date.now()}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+        } catch (err) {
+            console.error(err);
+        }
     };
+
 
 
     return (
@@ -106,7 +121,7 @@ const ReportInTable = () => {
                     <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataIn?.length}</p>
                     <button
                         className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                        onClick={exportToExcel}
+                        onClick={ExportExcel}
                     >
                         Export to Excel
                     </button>

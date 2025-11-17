@@ -2,7 +2,6 @@
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import { ExcelExportModule } from 'ag-grid-enterprise'
 import { BASE_URL, PRODUCT_URL_SG } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -10,7 +9,7 @@ import Modal from './ReactModal';
 import ModalDetailsTable from './ModalTableData';
 import axios from 'axios';
 
-ModuleRegistry.registerModules([AllCommunityModule, ExcelExportModule]);
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ReportSgTable = () => {
 
@@ -56,7 +55,6 @@ const ReportSgTable = () => {
         {
             field: "action",
             headerName: 'Action',
-            suppressExcelExport: true,
             flex: 1,
             maxWidth: 100,
             headerClass: 'ag-left-aligned-header',
@@ -90,12 +88,28 @@ const ReportSgTable = () => {
 
     }
 
-    const exportToExcel = () => {
-        gridRef.current.api.exportDataAsExcel({
-            fileName: `Report_${Date.now()}.xlsx`,
-            sheetName: "Report",
-            suppressColumnOutline: false,
-        });
+  const ExportExcel = async () => {
+        try {
+            const response = await axios.post(
+                `${BASE_URL}/api/export-excel`,
+                dataSg,
+                {
+                    responseType: "blob"
+                }
+            );
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `report_${Date.now()}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -105,7 +119,7 @@ const ReportSgTable = () => {
                     <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
                     <button
                         className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
-                        onClick={exportToExcel}
+                        onClick={ExportExcel}
                     >
                         Export to Excel
                     </button>
