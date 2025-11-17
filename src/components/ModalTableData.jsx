@@ -52,7 +52,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
         }
     }
 
-    const isNotNumber = /[^0-9]/.test(modalData?.map((item=>{return (item.SKU)})));
+    const isNotNumber = /[^0-9]/.test(modalData?.map((item=>{return (item?.SKU)})));
 
     return (
         <div className="overflow-x-auto mt-4 mb-2">

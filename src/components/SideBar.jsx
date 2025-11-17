@@ -36,7 +36,7 @@ export default function Sidebar() {
       title: "Order Reports",
       children: [
         { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
-        { title: "Picked Items only", path: "/orders/pickedItemsOnly" },
+        //{ title: "Picked Items only", path: "/orders/pickedItemsOnly" },
       ],
     },
   ];

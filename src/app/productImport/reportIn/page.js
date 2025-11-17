@@ -94,7 +94,8 @@ const ReportIn = () => {
           <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
           <div className='flex flex-row justify-end items-center gap-2 '>
             <div className='w-full'>
-              <input type="search" placeholder='Stylecode...' onChange={(e) => {
+              <input type="search" placeholder='Sku | Stylecode...' 
+              onChange={(e) => {
                 setSearchTerm(e.target.value)
                 if (e.target.value === '') {
                   getReportsIn()

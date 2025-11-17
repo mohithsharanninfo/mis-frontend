@@ -81,7 +81,7 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
             if (node.data?.Stylecode?.toLowerCase() === term.toLowerCase()) {
                 matchedRows.push(node.data);
             }
-               if (node.data?.Sku?.toLowerCase() === term.toLowerCase()) {
+            if (node.data?.Sku?.toLowerCase() === term.toLowerCase()) {
                 matchedRows.push(node.data);
             }
         });
@@ -90,6 +90,12 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
             api.applyTransaction({ remove: matchedRows });
             api.applyTransaction({ add: matchedRows, addIndex: 0 });
         }
+    };
+
+    const hasEmptyField = (data) => {
+        console.log(data)
+        if (!data) return false;
+        return Object.values(data).some(value => value === "" || value === null || value === undefined);
     };
 
     useEffect(() => {
@@ -111,9 +117,12 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
                     onSelectionChanged={onSelectionChanged}
                     suppressRowClickSelection={true}
                     getRowClass={(params) => {
-                        return searchResult?.some(p => p?.Sku === params?.data?.Sku)? 'highlight-row' : 
-                       '';
+                        const isSearched = searchResult?.some(p => p?.Sku === params?.data?.Sku);
+                        const isEmpty = hasEmptyField(params.data);
+
+                        return (isSearched || isEmpty) ? isSearched ? "highlight-row" : isEmpty ? "highlight-red":'':'' ;
                     }}
+                    isRowSelectable={(node) => !hasEmptyField(node.data)}
                     defaultColDef={{
                         resizable: false,
                         sortable: false,

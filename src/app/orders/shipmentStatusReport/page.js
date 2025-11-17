@@ -12,7 +12,7 @@ import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 
 
 const ShipmentStatus = () => {
-     const { user } = useUserDetails();
+    const { user } = useUserDetails();
     const today = new Date();
     const dispatch = useDispatch();
 
@@ -56,6 +56,10 @@ const ShipmentStatus = () => {
         getShipmentStatus()
     }, [fromDate, toDate])
 
+    useEffect(() => {
+        search()
+    }, [searchTerm])
+
 
     return (
         <div className="min-h-screen">
@@ -89,18 +93,37 @@ const ShipmentStatus = () => {
                     </div>
                 </div>
 
-                <div className='w-full max-w-[250px]'>
-                    <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
-                    <div className='flex flex-row justify-end items-center gap-2 '>
-                        <div className='w-full'>
-                            <input type="search" placeholder='Aw no | Order no...' onChange={(e) => {
-                                setSearchTerm(e.target.value)
+                <div className='flex flex-row items-center gap-x-5  '>
+                    <div className='w-full min-w-[300px]'>
+                        <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
+                        <select
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
                                 if (e.target.value === '') {
                                     getShipmentStatus()
                                 }
-                            }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                            }}
+                            className='border-2 border-amber-300 p-1 text-gray-500 text-sm  outline-amber-200 rounded w-full'
+                        >
+                            <option value=''>Select Status</option>
+                            <option value='DELIVERED'>DELIVERED</option>
+                            <option value='IN TRANSIT'>IN TRANSIT</option>
+                        </select>
+                    </div>
+
+                    <div className='w-full min-w-[300px] '>
+                        <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
+                        <div className='flex flex-row justify-end items-center gap-2 w-full '>
+                            <div className='w-full'>
+                                <input type="search" placeholder='Aw no | Order no...' onChange={(e) => {
+                                    setSearchTerm(e.target.value)
+                                    if (e.target.value === '') {
+                                        getShipmentStatus()
+                                    }
+                                }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                            </div>
+                            <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
                         </div>
-                        <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
                     </div>
                 </div>
             </div>

@@ -100,9 +100,11 @@ const ProductImport = () => {
         }
     }
 
-
     const stylecodesFilter = async () => {
         try {
+            if(!searchTerm){
+                return  toast.error('Please enter the value..');
+            }
             const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`);
             const allStylecodes = await result?.data?.data;
             setSearchResult(allStylecodes)
@@ -141,7 +143,6 @@ const ProductImport = () => {
                         <p className="text-base text-gray-600 italic text-center border w-fit px-2.5  rounded-lg  border-amber-200">{fileName}</p>
                     </div>
 
-
                     <div className='flex flex-row justify-between items-center gap-x-5'>
                         <button
                             onClick={() => fetchStyleCodeImage()}
@@ -160,7 +161,7 @@ const ProductImport = () => {
                     </div>
                 </div>
 
-                {resultData.length > 0 && !loadExcel ?
+                {resultData?.length > 0 && !loadExcel ?
                     <div>
                         <div className='flex justify-between items-center'>
                             <div className='flex justify-start items-center gap-x-6'>
@@ -207,7 +208,6 @@ const ProductImport = () => {
                                 <RingLoader color="#c7a44d" /></div>}
                     </div>
                 }
-
             </div>
 
             {/* Overlay when import is running */}
