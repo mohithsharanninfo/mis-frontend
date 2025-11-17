@@ -1,7 +1,8 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { ExcelExportModule } from 'ag-grid-enterprise'
 import { BASE_URL, PRODUCT_URL } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -10,14 +11,16 @@ import axios from 'axios';
 
 import ModalDetailsTable from './ModalTableData';
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+ModuleRegistry.registerModules([AllCommunityModule, ExcelExportModule]);
 
 const ReportInTable = () => {
 
     const dataIn = useSelector((state) => state?.sliceData?.importDataIn);
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState([]);
-    const [styleCode,setStyleCode] = useState('')
+    const [styleCode, setStyleCode] = useState('')
+
+    const gridRef = useRef();
 
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
@@ -56,13 +59,15 @@ const ReportInTable = () => {
             headerName: 'Action',
             flex: 1,
             maxWidth: 100,
+            suppressExcelExport: true,
             headerClass: 'ag-left-aligned-header',
             cellRenderer: (params) => (
                 <p onClick={() => {
                     checkStylecodeData(params?.data)
                     openModal()
                 }} className="w-fit bg-gradient-to-r from-[#614119] via-[#d4af37] to-[#614119] cursor-pointer text-center text-white px-2 rounded-sm ">Check</p>
-            )
+            ),
+
         }
     ]);
 
@@ -84,12 +89,31 @@ const ReportInTable = () => {
         }
     }
 
+    const exportToExcel = () => {
+          //gridRef.current.api.sizeColumnsToFit();
+        gridRef.current.api.exportDataAsExcel({
+            fileName: `Report_${Date.now()}.xlsx`,
+            sheetName: "Report",
+            suppressColumnOutline: false,
+        });
+    };
+
+
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataIn?.length}</p>
+                <div className='flex justify-between items-center'>
+                    <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataIn?.length}</p>
+                    <button
+                        className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                        onClick={exportToExcel}
+                    >
+                        Export to Excel
+                    </button>
+                </div>
+
                 <AgGridReact
-                    //ref={gridRef}
+                    ref={gridRef}
                     theme="legacy"
                     rowHeight={40}
                     rowData={dataIn}
@@ -112,7 +136,7 @@ const ReportInTable = () => {
                         <div className="overflow-x-auto mt-4 mb-2 text-black">
                             <ModalDetailsTable modalData={modalData} LocaleIN={1} LocaleSG={0} StyleCode={styleCode} />
                         </div>
-               
+
                     </Modal>
                 )}
             </div>

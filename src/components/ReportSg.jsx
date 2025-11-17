@@ -1,7 +1,8 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { ExcelExportModule } from 'ag-grid-enterprise'
 import { BASE_URL, PRODUCT_URL_SG } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -9,9 +10,11 @@ import Modal from './ReactModal';
 import ModalDetailsTable from './ModalTableData';
 import axios from 'axios';
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+ModuleRegistry.registerModules([AllCommunityModule, ExcelExportModule]);
 
 const ReportSgTable = () => {
+
+    const gridRef = useRef();
 
     const dataSg = useSelector((state) => state?.sliceData?.importDataSg);
     const [showModal, setShowModal] = useState(false);
@@ -53,6 +56,7 @@ const ReportSgTable = () => {
         {
             field: "action",
             headerName: 'Action',
+            suppressExcelExport: true,
             flex: 1,
             maxWidth: 100,
             headerClass: 'ag-left-aligned-header',
@@ -86,12 +90,29 @@ const ReportSgTable = () => {
 
     }
 
+    const exportToExcel = () => {
+        gridRef.current.api.exportDataAsExcel({
+            fileName: `Report_${Date.now()}.xlsx`,
+            sheetName: "Report",
+            suppressColumnOutline: false,
+        });
+    };
+
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
+                <div className='flex justify-between items-center'>
+                    <p className='my-2 font-semibold text-[#614119]'>Imported Stylecodes:{dataSg?.length}</p>
+                    <button
+                        className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                        onClick={exportToExcel}
+                    >
+                        Export to Excel
+                    </button>
+                </div>
+
                 <AgGridReact
-                    //ref={gridRef}
+                    ref={gridRef}
                     theme="legacy"
                     rowHeight={40}
                     rowData={dataSg}

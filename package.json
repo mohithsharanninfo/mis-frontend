@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
-    "ag-grid-community": "^34.2.0",
-    "ag-grid-react": "^34.2.0",
+    "ag-grid-community": "^34.3.1",
+    "ag-grid-enterprise": "^34.3.1",
+    "ag-grid-react": "^34.3.1",
     "axios": "^1.12.2",
     "date-fns": "^4.1.0",
     "next": "15.5.5",
