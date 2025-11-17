@@ -2,16 +2,10 @@
 import axios from "axios";
 import Image from "next/image";
 import bhima_boy from '../../public/bhima_boy.png';
-import  { useUserDetails } from "@/auth";
-
-
 
 axios.defaults.withCredentials = true
 
 export default function Home() {
-  const { user } = useUserDetails();
-
-
   return (
     <div className="font-sans grid  items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">

@@ -7,10 +7,9 @@ import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
-import { useUserDetails } from '@/auth';
+
 
 const ReportSg = () => {
-  const { user } = useUserDetails();
   const today = new Date();
   const dispatch = useDispatch();
 

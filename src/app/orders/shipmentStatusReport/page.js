@@ -7,12 +7,10 @@ import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
 import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
-import { useUserDetails } from '@/auth';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
 
 
 const ShipmentStatus = () => {
-    const { user } = useUserDetails();
     const today = new Date();
     const dispatch = useDispatch();
 

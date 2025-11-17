@@ -8,14 +8,11 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {  RingLoader } from 'react-spinners';
 import { FaFileCsv } from "react-icons/fa";
-import { useUserDetails } from '@/auth';
 import { SiTicktick } from "react-icons/si";
 import { CiSearch } from "react-icons/ci";
 
 
 const ProductImport = () => {
-    const { user } = useUserDetails();
-
     const selectedStylecodes = useSelector((state) => state?.sliceData?.selectedStylecodes)
 
     const [fileName, setFileName] = useState('No file choosen');

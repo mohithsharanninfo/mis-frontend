@@ -18,10 +18,10 @@ export default function ClientLayout({ children }) {
         <div id="root">
           {children}
         </div>
-
+      </main>
         <ToastContainer
           position="top-right"
-          autoClose={1500}
+          autoClose={800}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}
@@ -31,7 +31,6 @@ export default function ClientLayout({ children }) {
           pauseOnHover
           theme="light"
         />
-      </main>
     </>
   );
 }

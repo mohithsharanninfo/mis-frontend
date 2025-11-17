@@ -32,7 +32,7 @@ const Login = () => {
         Password: data?.password
       }
 
-      const response = await axios.post(`${BASE_URL}/api/login`, loginPayload);
+      const response = await axios.post(`${BASE_URL}/api/login`, loginPayload,{ withCredentials: true });
       const result = await response?.data;
 
       if (result?.success === true) {

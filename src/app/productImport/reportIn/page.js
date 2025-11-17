@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import ReportInTable from '@/components/ReportIn'
-import { useUserDetails } from '@/auth';
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
@@ -10,7 +9,6 @@ import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 
 const ReportIn = () => {
-  const { user } = useUserDetails();
 
   const today = new Date();
   const dispatch = useDispatch();
