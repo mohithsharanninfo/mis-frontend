@@ -63,7 +63,7 @@ const ShipmentStatus = () => {
         <div className="min-h-screen">
             <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Shipment Status Report</h1>
 
-            <div className='flex items-center justify-between'>
+            <div className='flex lg:flex-row flex-col  items-center justify-between gap-x-4'>
 
                 <div className="flex gap-4 items-center ">
                     <div className=" max-w-[300px] w-full">
@@ -91,8 +91,8 @@ const ShipmentStatus = () => {
                     </div>
                 </div>
 
-                <div className='flex flex-row items-center gap-x-5  '>
-                    <div className='w-full min-w-[300px]'>
+                <div className='flex flex-row items-center gap-x-5 mt-2 lg:mt-0 '>
+                    <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Select</label>
                         <select
                             onChange={(e) => {
@@ -109,7 +109,7 @@ const ShipmentStatus = () => {
                         </select>
                     </div>
 
-                    <div className='w-full min-w-[300px] '>
+                    <div className='w-full max-w-[300px] lg:min-w-[200px]'>
                         <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
                         <div className='flex flex-row justify-end items-center gap-2 w-full '>
                             <div className='w-full'>
@@ -120,7 +120,7 @@ const ShipmentStatus = () => {
                                     }
                                 }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
                             </div>
-                            <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
+                            <div className='bg-[#b8860b] hidden lg:block p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => search()}> <CiSearch color='white' size={24} /></div>
                         </div>
                     </div>
                 </div>

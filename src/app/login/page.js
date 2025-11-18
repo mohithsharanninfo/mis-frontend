@@ -57,10 +57,10 @@ const Login = () => {
             height={150}
           />
         </div>
-        <h1 className="text-4xl font-bold text-center " style={{ color: "#614119" }}>
+        <h1 className="lg:text-4xl text-3xl font-bold text-center " style={{ color: "#614119" }}>
           Magna MIS Insight
         </h1>
-        <p className='text-center text-xl '>The clear insights your business needs to achieve true brilliance.</p>
+        <p className='text-center text-base lg:text-xl '>The clear insights your business needs to achieve true brilliance.</p>
       </div>
       <div className='flex justify-center col-span-2 gap-y-6' >
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4 w-full max-w-md" >

@@ -1,5 +1,4 @@
 "use client";
-import ReportSgTable from '@/components/ReportSg'
 import { setImportedDataSg } from '@/redux/slice';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
@@ -7,6 +6,11 @@ import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
+import dynamic from "next/dynamic";
+
+const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
+  ssr: false,
+});
 
 
 const ReportSg = () => {
@@ -58,7 +62,7 @@ const ReportSg = () => {
   return (
     <div className="min-h-screen">
       <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-SG</h1>
-      <div className='flex items-center justify-between'>
+      <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center  ">
           <div className=" max-w-[300px] w-full">
             <label className="block text-sm font-semibold text-[#c7a44d] ">

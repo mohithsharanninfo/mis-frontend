@@ -18,10 +18,10 @@ export default function Home() {
               height={150}
             />
           </div>
-          <h1 className="text-4xl font-bold text-center " style={{ color: "#614119" }}>
+          <h1 className="lg:text-4xl text-2xl font-bold text-center " style={{ color: "#614119" }}>
             Magna MIS Insight
           </h1>
-          <p className='text-center text-xl '>The clear insights your business needs to achieve true brilliance.</p>
+          <p className='text-center text-base lg:text-xl '>The clear insights your business needs to achieve true brilliance.</p>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

@@ -1,12 +1,16 @@
 "use client";
 import React, { useEffect, useState } from 'react'
-import ReportInTable from '@/components/ReportIn'
 import { useDispatch } from 'react-redux';
 import { startOfDay, endOfDay, format } from 'date-fns';
 import { CiSearch } from "react-icons/ci";
 import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
+import dynamic from "next/dynamic";
+
+const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
+  ssr: false,
+});
 
 const ReportIn = () => {
 
@@ -61,7 +65,7 @@ const ReportIn = () => {
     <div className="min-h-screen">
       <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-IN</h1>
 
-      <div className='flex items-center justify-between'>
+  <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center ">
           <div className=" max-w-[300px] w-full">
             <label className="block text-sm font-semibold text-[#c7a44d] ">

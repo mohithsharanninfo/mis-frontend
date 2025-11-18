@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 export function middleware(req) {
   const token = req.cookies.get("token")?.value || null;
-  console.log("MIDDLEWARE TOKEN:", token);
 
   const protectedRoutes = [
     "/",

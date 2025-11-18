@@ -55,7 +55,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="fixed top-0 left-0 h-full w-60 bg-[#8a5a20] text-white shadow-lg p-4 ">
+    <aside className="h-full w-full bg-[#8a5a20] text-white shadow-lg p-4 ">
       <h2 className="text-2xl font-bold mb-6">MIS APP</h2>
 
       <ul className="space-y-2">

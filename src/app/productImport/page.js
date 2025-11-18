@@ -3,13 +3,17 @@ import * as XLSX from 'xlsx';
 import React, { useState } from 'react'
 import axios from 'axios';
 import { BASE_URL } from '../../../constant';
-import AgGridTable from '@/components/AgGridTable';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {  RingLoader } from 'react-spinners';
 import { FaFileCsv } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { CiSearch } from "react-icons/ci";
+import dynamic from "next/dynamic";
+
+const AgGridTable = dynamic(() => import("@/components/AgGridTable"), {
+  ssr: false, 
+});
 
 
 const ProductImport = () => {
@@ -112,7 +116,7 @@ const ProductImport = () => {
 
     return (
         <div className="font-sans h-screen" >
-            <div className=' pb-10'>
+            <div className='pb-20 lg:pb-10'>
                 <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Product Import</h1>
                 <div className="mx-auto mt-15 bg-white/90 grid gap-y-6 p-4 rounded-2xl shadow-[0_10px_25px_rgba(0,0,0,0.2)] border border-[#d4af37] m-4  max-w-md w-full">
                     <p className='text-center'>Choose file to import.</p>
@@ -160,7 +164,7 @@ const ProductImport = () => {
 
                 {resultData?.length > 0 && !loadExcel ?
                     <div>
-                        <div className='flex justify-between items-center'>
+                        <div className='lg:flex lg:flex-row lg:justify-between lg:items-center  justify-center'>
                             <div className='flex justify-start items-center gap-x-6'>
                                 <p>Stylecodes:{resultData?.length}</p>
                                 <p>Selected:{selectedStylecodes?.length}</p>
@@ -181,7 +185,7 @@ const ProductImport = () => {
                             </div>
                         </div>
                         <div className='py-5'><AgGridTable rowData={resultData} searchResult={searchResult} searchTerm={searchTerm} /></div>
-                        <div className="mx-auto flex lg:flex-row flex-col max-w-2xl w-full lg:gap-x-10 gap-5 ">
+                        <div className="mx-auto flex lg:flex-row flex-col max-w-2xl w-full lg:gap-x-10 gap-5  ">
                             <button
                                 onClick={() => importStylecodes()}
                                 className="w-full bg-gradient-to-r from-[#c7a44d] via-[#d4af37] to-[#614119] cursor-pointer
