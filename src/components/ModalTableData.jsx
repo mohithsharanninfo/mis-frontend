@@ -52,7 +52,8 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
         }
     }
 
-    const isNotNumber = /[^0-9]/.test(modalData?.map((item=>{return (item?.SKU)})));
+    const firstSKU = modalData?.[0]?.SKU || "";
+    const isNotNumber = /[^0-9]/.test(firstSKU);
 
     return (
         <div className="overflow-x-auto mt-4 mb-2">
@@ -62,8 +63,8 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                         <th className="px-4 py-2 border">Sku</th>
                         <th className="px-4 py-2 border">Stylecode</th>
                         <th className="px-4 py-2 border">Product Pushed</th>
-                       {isNotNumber ? '': <th className="px-4 py-2 border">Order No</th>}
-                       {isNotNumber ? '':<th className="px-4 py-2 border">Sold Flag</th>} 
+                        {isNotNumber ? '' : <th className="px-4 py-2 border">Order No</th>}
+                        {isNotNumber ? '' : <th className="px-4 py-2 border">Sold Flag</th>}
                         <th className="px-4 py-2 border">Is Lock</th>
                         <th className="px-4 py-2 border">Is Stock</th>
                         <th className="px-4 py-2 border">Branch Code</th>
@@ -90,8 +91,8 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                             </td>
 
                             <td className="px-4 py-2 border capitalize">{item?.productpushed}</td>
-                           {isNotNumber ?'': <td className="px-4 py-2 border capitalize">{item?.order_no}</td>}
-                           {isNotNumber ?'': <td className="px-4 py-2 border capitalize">{item?.sold_flag}</td>}
+                            {isNotNumber ? '' : <td className="px-4 py-2 border capitalize">{item?.order_no}</td>}
+                            {isNotNumber ? '' : <td className="px-4 py-2 border capitalize">{item?.sold_flag}</td>}
                             <td className="px-4 py-2 border">{item?.islock}</td>
                             <td className="px-4 py-2 border">{item?.isstock}</td>
                             <td className="px-4 py-2 border">{item?.branch_code}</td>

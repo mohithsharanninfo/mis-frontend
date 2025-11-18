@@ -52,8 +52,17 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
                 );
             },
         },
+           {
+            field: "Sku", headerName: 'Sku', flex: 1, minWidth: 100, wrapText: true,
+            autoHeight: true,
+            cellRenderer: (params) => {
+                return (
+                    <p className='cursor-pointer' title='click to copy' onClick={() => navigator.clipboard.writeText(params?.value)}>{params?.value}</p>
+                );
+            },
+        },
         {
-            field: "Name", headerName: 'Title', flex: 1, minWidth: 200, wrapText: true,
+            field: "Name", headerName: 'Title', flex: 1, minWidth: 300, wrapText: true,
             autoHeight: true,
         },
         {
