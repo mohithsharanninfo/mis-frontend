@@ -41,8 +41,6 @@ export default function ClientLayout({ children }) {
 
 </div>
 
- 
-  
       <ToastContainer
         position="top-right"
         autoClose={800}
