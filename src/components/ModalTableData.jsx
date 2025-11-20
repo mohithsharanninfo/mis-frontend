@@ -15,6 +15,7 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     };
 
     const reImportStylecode = async () => {
+         const token = Cookies.get("token");
         try {
             const response = await axios.post(`${BASE_URL}/api/re_importStylecode`, {
                 Stylecode: StyleCode,
@@ -22,6 +23,11 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
                 LocaleSG: LocaleSG,
                 LocaleAE: 0,
                 LocaleUS: 0
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
             })
 
             const result = await response.data
