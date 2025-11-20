@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../../constant';
 import { setDeliveryStatusData } from '../../../redux/slice';
 import { useDispatch } from 'react-redux';
 import ShipmentStatusReport from '@/components/ShipmentStatusReport';
+import Cookies from 'js-cookie';
 
 
 const ShipmentStatus = () => {
@@ -30,7 +31,15 @@ const ShipmentStatus = () => {
 
     const getShipmentStatus = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`);
+            const token = Cookies.get("token");
+            const response = await axios.get(`${BASE_URL}/api/shipmentStatus?fromDate=${fromDate}&toDate=${toDate}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             const result = await response?.data?.data
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
@@ -39,9 +48,17 @@ const ShipmentStatus = () => {
     }
 
     const search = async () => {
-        if(searchTerm === '') return;
+        if (searchTerm === '') return;
+        const token = Cookies.get("token");
         try {
-            const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}`);
+            const response = await axios.get(`${BASE_URL}/api/searchStatus?search=${searchTerm}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             const result = await response?.data?.data
             dispatch(setDeliveryStatusData(result))
         } catch (err) {
@@ -103,7 +120,7 @@ const ShipmentStatus = () => {
                             }}
                             className='border-2 border-amber-300 p-1 text-gray-500 text-sm  outline-amber-200 rounded w-full'
                         >
-                            <option value=''>Select Status</option>
+                            <option value=''>Select All</option>
                             <option value='DELIVERED'>DELIVERED</option>
                             <option value='IN TRANSIT'>IN TRANSIT</option>
                         </select>

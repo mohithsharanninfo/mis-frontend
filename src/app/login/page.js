@@ -13,7 +13,6 @@ import { BASE_URL } from '../../../constant';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
-
 const Login = () => {
 
   const router = useRouter();
@@ -32,15 +31,15 @@ const Login = () => {
         Password: data?.password
       }
 
-      const response = await axios.post(`${BASE_URL}/api/login`, loginPayload,{ withCredentials: true });
+      const response = await axios.post(`${BASE_URL}/api/users/mis-login`, loginPayload, { withCredentials: true });
       const result = await response?.data;
 
       if (result?.success === true) {
         toast.success(result?.message);
         router.push('/');
-      }else{
+      } else {
         toast.error('Something went wrong!');
-      } 
+      }
     } catch (err) {
       toast.error(err?.response?.data?.message);
     }

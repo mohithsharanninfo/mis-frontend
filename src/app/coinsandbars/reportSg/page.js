@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
 import dynamic from "next/dynamic";
+import Cookies from 'js-cookie';
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
   ssr: false,
@@ -32,7 +33,13 @@ const CoinsReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-    const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`);
+    const token = Cookies.get("token");
+    const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,  {
+          headers: {
+            Authorization: `Bearer ${token}`,   
+            "Content-Type": "application/json"
+          }
+        });
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -46,7 +53,13 @@ const CoinsReportSg = () => {
         getReportsSg()
         return
       }
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSg?searchTerm=${searchTerm}`);
+       const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,  {
+          headers: {
+            Authorization: `Bearer ${token}`,   
+            "Content-Type": "application/json"
+          }
+        });
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -60,7 +73,7 @@ const CoinsReportSg = () => {
 
   return (
     <div className="min-h-screen">
-      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-SG</h1>
+      <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Coins Report-SG</h1>
       <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center  ">
           <div className=" max-w-[300px] w-full">

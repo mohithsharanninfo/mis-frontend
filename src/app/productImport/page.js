@@ -5,16 +5,16 @@ import axios from 'axios';
 import { BASE_URL } from '../../../constant';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import {  RingLoader } from 'react-spinners';
+import { RingLoader } from 'react-spinners';
 import { FaFileCsv } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { CiSearch } from "react-icons/ci";
 import dynamic from "next/dynamic";
+import Cookies from "js-cookie";
 
 const AgGridTable = dynamic(() => import("@/components/AgGridTable"), {
-  ssr: false, 
+    ssr: false,
 });
-
 
 const ProductImport = () => {
     const selectedStylecodes = useSelector((state) => state?.sliceData?.selectedStylecodes)
@@ -24,7 +24,6 @@ const ProductImport = () => {
     const [resultData, setResultData] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [searchResult, setSearchResult] = useState([])
-
     const [loadExcel, setLoadExcel] = useState(false)
     const [loadImport, setLoadImport] = useState(false)
 
@@ -62,10 +61,19 @@ const ProductImport = () => {
             return toast.warn('Please upload a CSV file.');
         }
         setLoadExcel(true)
+        const token = Cookies.get("token");
         try {
-            const response = await axios.post(`${BASE_URL}/api/getStylecodeImages`, { stylecodes: excelData });
+            const response = await axios.post(`${BASE_URL}/api/getStylecodeImages`,
+                { stylecodes: excelData },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,   // <-- your token here
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             const result = await response?.data;
-            setResultData(result?.data)
+            setResultData(result?.data || [])
             if (result?.data?.length <= 0) {
                 return toast.warn('No data found !');
             }
@@ -81,8 +89,17 @@ const ProductImport = () => {
             return toast.error('Stylecodes not selected !');
         }
         setLoadImport(true)
+        const token = Cookies.get("token");
         try {
-            const response = await axios.post(`${BASE_URL}/api/importStylecode`, { jsonPayload: selectedStylecodes });
+            const response = await axios.post(`${BASE_URL}/api/importStylecode`,
+                 { jsonPayload: selectedStylecodes },
+                 {
+                    headers: {
+                        Authorization: `Bearer ${token}`,   // <-- your token here
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             const result = await response?.data;
 
             if (result?.success === true) {
@@ -103,10 +120,16 @@ const ProductImport = () => {
 
     const stylecodesFilter = async () => {
         try {
-            if(!searchTerm){
-                return  toast.error('Please enter the value..');
+            if (!searchTerm) {
+                return toast.error('Please enter the value..');
             }
-            const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`);
+            const token = Cookies.get("token");
+            const result = await axios.get(`${BASE_URL}/api/searchstylecodeCsv?search=${searchTerm}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
             const allStylecodes = await result?.data?.data;
             setSearchResult(allStylecodes)
         } catch (err) {

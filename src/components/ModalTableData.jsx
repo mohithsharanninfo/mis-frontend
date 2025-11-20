@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL, PRODUCT_IMAGE_URL } from "../../constant";
 import axios from "axios";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, StyleCode }) {
 
@@ -35,9 +36,15 @@ export default function ModalDetailsTable({ modalData = [], LocaleIN, LocaleSG, 
     }
 
     const ViewImages = async () => {
+        const token = Cookies.get("token");
         try {
             const response = await axios.post(`${BASE_URL}/api/getProductImages`, {
                 Stylecode: StyleCode
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
             })
 
             const result = await response.data

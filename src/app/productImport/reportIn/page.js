@@ -7,6 +7,7 @@ import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
+import Cookies from 'js-cookie';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
@@ -34,7 +35,15 @@ const ReportIn = () => {
 
   const getReportsIn = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`);
+      const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataIn(result))
     } catch (err) {
@@ -48,7 +57,15 @@ const ReportIn = () => {
         getReportsIn()
         return
       }
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeIn?searchTerm=${searchTerm}`);
+      const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,   
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataIn(result))
     } catch (err) {
@@ -65,7 +82,7 @@ const ReportIn = () => {
     <div className="min-h-screen">
       <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Report-IN</h1>
 
-  <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
+      <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center ">
           <div className=" max-w-[300px] w-full">
             <label className="block text-sm font-semibold text-[#c7a44d] ">
@@ -96,13 +113,13 @@ const ReportIn = () => {
           <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
           <div className='flex flex-row justify-end items-center gap-2 '>
             <div className='w-full'>
-              <input type="search" placeholder='Sku | Stylecode...' 
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-                if (e.target.value === '') {
-                  getReportsIn()
-                }
-              }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+              <input type="search" placeholder='Sku | Stylecode...'
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  if (e.target.value === '') {
+                    getReportsIn()
+                  }
+                }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
             </div>
             <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchStylecodesIn()}> <CiSearch color='white' size={24} /></div>
           </div>

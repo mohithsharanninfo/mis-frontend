@@ -7,6 +7,7 @@ import { BASE_URL } from '../../../../constant';
 import { setImportedDataIn } from '../../../redux/slice';
 import axios from 'axios';
 import dynamic from "next/dynamic";
+import Cookies from 'js-cookie';
 
 const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
   ssr: false,
@@ -34,7 +35,15 @@ const CoinsReportIn = () => {
 
   const getReportsIn = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`);
+       const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`,
+          {
+          headers: {
+            Authorization: `Bearer ${token}`,   
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataIn(result))
     } catch (err) {
@@ -48,7 +57,15 @@ const CoinsReportIn = () => {
         getReportsIn()
         return
       }
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeIn?searchTerm=${searchTerm}`);
+       const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
+          {
+          headers: {
+            Authorization: `Bearer ${token}`,   
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataIn(result))
     } catch (err) {

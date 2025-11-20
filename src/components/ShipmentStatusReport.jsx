@@ -2,13 +2,14 @@
 import { AgGridReact } from 'ag-grid-react'
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import React, { useState } from 'react'
-import { BLUEDART_TRACK, SEQUEL_TRACK } from '../../constant';
+import { BASE_URL, BLUEDART_TRACK, SEQUEL_TRACK } from '../../constant';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import { MdContentCopy } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -141,6 +142,30 @@ const ShipmentStatusReport = () => {
 
     ]);
 
+    const ExportExcel = async () => {
+        try {
+            const response = await axios.post(
+                `${BASE_URL}/api/exportToExcel`,
+                shipmentStatusData,
+                {
+                    responseType: "blob"
+                }
+            );
+
+            // Create download link
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `report_${Date.now()}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const track_url = modalData?.logisticPartner?.toLowerCase() == 'sequel' || modalData?.logisticPartner?.toLowerCase() == 'sequel247' ? `${SEQUEL_TRACK}${modalData?.AwNo}` :
         modalData?.logisticPartner?.toLowerCase() == 'bluedart' ? `${BLUEDART_TRACK}${modalData?.AwNo}` : '#';
 
@@ -148,7 +173,15 @@ const ShipmentStatusReport = () => {
     return (
         <div className="ag-theme-alpine w-full overflow-x-auto">
             <div className='w-full my-8 '>
-                <p className='my-2 font-semibold text-[#614119]'>Total:{shipmentStatusData?.length}</p>
+                <div className='flex justify-between items-center'>
+                    <p className='my-2 font-semibold text-[#614119]'>Total:{shipmentStatusData?.length}</p>
+                    <button
+                        className="mb-4 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                        onClick={ExportExcel}
+                    >
+                        Export to Excel
+                    </button>
+                </div>
                 <AgGridReact
                     //ref={gridRef}
                     theme="legacy"

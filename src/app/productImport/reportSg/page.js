@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import axios from 'axios';
 import { BASE_URL } from '../../../../constant';
 import dynamic from "next/dynamic";
+import Cookies from 'js-cookie';
 
 const ReportSgTable = dynamic(() => import("@/components/ReportSg"), {
   ssr: false,
@@ -33,7 +34,15 @@ const ReportSg = () => {
 
   const getReportsSg = async () => {
     try {
-    const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`);
+      const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/importedProducts?Locale=en-SG&fromDate=${fromDate}&toDate=${toDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -47,7 +56,15 @@ const ReportSg = () => {
         getReportsSg()
         return
       }
-      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSg?searchTerm=${searchTerm}`);
+      const token = Cookies.get("token");
+      const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-SG`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
       const result = await response?.data?.data
       dispatch(setImportedDataSg(result))
     } catch (err) {
@@ -94,12 +111,12 @@ const ReportSg = () => {
           <div className='flex flex-row justify-end items-center gap-2 '>
             <div className='w-full'>
               <input type="search" placeholder='Sku | Stylecode...'
-               onChange={(e) => {
-                setSearchTerm(e.target.value)
-                if (e.target.value === '') {
-                  getReportsSg()
-                }
-              }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  if (e.target.value === '') {
+                    getReportsSg()
+                  }
+                }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
             </div>
             <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchStylecodesSg()}> <CiSearch color='white' size={24} /></div>
           </div>

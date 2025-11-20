@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Modal from './ReactModal';
 import axios from 'axios';
 import ModalDetailsTable from './ModalTableData';
+import Cookies from 'js-cookie';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -77,8 +78,13 @@ const ReportInTable = () => {
                 Stylecode: data?.StyleCode,
                 sku: data?.sku,
             }
-
-            const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload);
+            const token = Cookies.get("token");
+            const response = await axios.post(`${BASE_URL}/api/checkstylecodeimport`, payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
             const result = await response?.data?.data;
             setModalData(result)
         } catch (err) {
@@ -86,12 +92,10 @@ const ReportInTable = () => {
         }
     }
 
-
-
     const ExportExcel = async () => {
         try {
             const response = await axios.post(
-                `${BASE_URL}/api/export-excel`,
+                `${BASE_URL}/api/exportToExcel`,
                 dataIn,
                 {
                     responseType: "blob"

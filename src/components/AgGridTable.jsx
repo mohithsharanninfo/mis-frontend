@@ -102,7 +102,6 @@ const AgGridTable = ({ rowData, searchResult, searchTerm }) => {
     };
 
     const hasEmptyField = (data) => {
-        console.log(data)
         if (!data) return false;
         return Object.values(data).some(value => value === "" || value === null || value === undefined);
     };
