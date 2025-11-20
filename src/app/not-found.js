@@ -1,0 +1,9 @@
+export default function NotFound() {
+  return (
+    <div className="flex flex-col h-screen justify-center items-center">
+      <img src='/not-found.png' className="lg:h-[500px] h-[300px]"/>
+      <h1 className="lg:text-2xl">404 - Page Not Found</h1>
+      <p className="text-sm lg:text-lg">Sorry, the page you are looking for does not exist.</p>
+    </div>
+  );
+}
