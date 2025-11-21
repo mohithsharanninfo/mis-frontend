@@ -46,6 +46,12 @@ export default function Sidebar() {
         { title: "Shipment Status Report", path: "/orders/shipmentStatusReport" },
       ],
     },
+      {
+      title: "BMC Reports",
+      children: [
+        { title: "Bmc Summary", path: "/bmc" },
+      ],
+    },
   ];
 
   // ⬇️ Recursive menu rendering
@@ -108,7 +114,7 @@ export default function Sidebar() {
   return (
     <aside className="h-full w-full bg-[#8a5a20] text-white shadow-lg p-4">
       <div className=" flex items-center justify-between mb-5 border-b border-white pb-2">
-        <div className="text-2xl font-bold">MIS APP</div>
+        <div className="text-2xl font-bold">MIS ADMIN</div>
         <div
           className="px-3 py-2 rounded-md hover:bg-gray-800 cursor-pointer"
           onClick={LogOut}

@@ -14,14 +14,12 @@ const ReportInTable = dynamic(() => import("@/components/ReportIn"), {
 });
 
 const CoinsReportIn = () => {
-
   const today = new Date();
   const dispatch = useDispatch();
 
   const [fromDate, setFromDate] = useState(format(today, "yyyy-MM-dd"));
   const [toDate, setToDate] = useState(format(today, "yyyy-MM-dd"));
   const [searchTerm, setSearchTerm] = useState('')
-
 
   const handleStartChange = (e) => {
     const selected = startOfDay(new Date(e.target.value));
@@ -35,11 +33,11 @@ const CoinsReportIn = () => {
 
   const getReportsIn = async () => {
     try {
-       const token = Cookies.get("token");
+      const token = Cookies.get("token");
       const response = await axios.get(`${BASE_URL}/api/importedCoins?Locale=en-IN&fromDate=${fromDate}&toDate=${toDate}`,
-          {
+        {
           headers: {
-            Authorization: `Bearer ${token}`,   
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           }
         }
@@ -57,11 +55,11 @@ const CoinsReportIn = () => {
         getReportsIn()
         return
       }
-       const token = Cookies.get("token");
+      const token = Cookies.get("token");
       const response = await axios.get(`${BASE_URL}/api/searchstylecodeSku?searchTerm=${searchTerm}&locale=en-IN`,
-          {
+        {
           headers: {
-            Authorization: `Bearer ${token}`,   
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           }
         }
@@ -77,12 +75,11 @@ const CoinsReportIn = () => {
     getReportsIn()
   }, [fromDate, toDate]);
 
-
   return (
     <div className="min-h-screen">
       <h1 className='text-center text-2xl my-5 border-b border-amber-200'>Coins Report-IN</h1>
 
-  <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
+      <div className='flex lg:flex-row flex-col lg:items-center lg:justify-between gap-x-4'>
         <div className="flex gap-4 items-center ">
           <div className=" max-w-[300px] w-full">
             <label className="block text-sm font-semibold text-[#c7a44d] ">
@@ -113,13 +110,13 @@ const CoinsReportIn = () => {
           <label className="block text-sm font-semibold text-[#c7a44d]">Search </label>
           <div className='flex flex-row justify-end items-center gap-2 '>
             <div className='w-full'>
-              <input type="search" placeholder='Sku | Stylecode...' 
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-                if (e.target.value === '') {
-                  getReportsIn()
-                }
-              }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
+              <input type="search" placeholder='Sku | Stylecode...'
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  if (e.target.value === '') {
+                    getReportsIn()
+                  }
+                }} className='border-2 border-amber-300 p-1 text-sm text-black outline-amber-200 rounded w-full' />
             </div>
             <div className='bg-[#b8860b] p-1 rounded-bl-md rounded-tr-md cursor-pointer' onClick={() => searchStylecodesIn()}> <CiSearch color='white' size={24} /></div>
           </div>
